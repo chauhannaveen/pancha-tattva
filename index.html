@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pancha Tattva — The Five Elements</title>
+<meta name="description" content="A living journey through the five elements — earth, water, fire, air and ether — and the mind and consciousness that lie beyond them, rendered in real time.">
+<meta property="og:title" content="Pancha Tattva — The Five Elements">
+<meta property="og:description" content="Earth, water, fire, air, ether, and what lies beyond them. Living worlds rendered in your browser.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23120a24'/%3E%3Ccircle cx='50' cy='50' r='20' fill='%23ffd98a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="bar"></div>
+<div id="load"><div><b>ॐ</b>AWAKENING THE ELEMENTS</div></div>
+
+<header>
+  <div>पञ्च तत्त्व &nbsp;·&nbsp; PANCHA TATTVA</div>
+  <div class="r"><a id="td">☀ TODAY</a><a id="auto">▶ JOURNEY</a><a id="dh">◉ DHYANA</a><a id="kn">❋ WISDOM</a><a id="cap">⤓ CAPTURE</a><a id="fs">⛶ FULL</a><a id="snd">♪ SOUND</a></div>
+</header>
+
+<nav id="nav"></nav>
+<div id="hint">SCROLL</div>
+<div id="dhy"><div id="ring"><div id="bj">ॐ</div></div><div id="btxt">BREATHE IN</div><div id="gd"></div></div>
+<button id="tod" title="Time of day (L)">◐ LIVE</button>
+<button id="jno">❋ WISDOM</button>
+<aside id="jn"><button id="jnx" aria-label="Hide the wisdom card" title="Hide (K)">×</button><div><small>FROM THE TEXTS</small><p id="jn0"></p></div><div><small>WORTH KNOWING</small><p id="jn1"></p></div><div><small>PRACTICE</small><p id="jn2"></p></div></aside>
+<div id="prb"></div>
+<section id="pr" aria-label="Today's practice"></section>
+<div id="toast"></div>
+<div id="keys">MOVE · STIR &nbsp;&nbsp; CLICK · RIPPLE &nbsp;&nbsp; D · DHYANA &nbsp;&nbsp; K · WISDOM &nbsp;&nbsp; P · PRACTICE &nbsp;&nbsp; L · TIME OF DAY &nbsp;&nbsp; H · HIDE UI &nbsp;&nbsp; F · FULLSCREEN &nbsp;&nbsp; C · CAPTURE &nbsp;&nbsp; ← → · TRAVEL</div>
+
+<section class="panel hero">
+  <div class="count" style="--c:#d9c7ff">THE FIVE ELEMENTS · AND THE TWO BEYOND</div>
+  <h1 class="deva">पञ्च तत्त्व</h1>
+  <div class="name">PANCHA TATTVA</div>
+  <p class="line">Everything that is, was, or will be is woven from five elements. Beyond them wait the mind that sees and the awareness that knows.</p>
+  <div class="btns"><button id="begin">BEGIN THE JOURNEY</button><button id="tdb">TODAY'S PRACTICE</button></div>
+</section>
+<div id="panels"></div>
+<div id="track"></div>
+
+<script src="js/content.js"></script>
+<script src="js/shaders.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
