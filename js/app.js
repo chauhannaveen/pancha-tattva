@@ -3,14 +3,17 @@
    Loads after content.js and shaders.js. */
 
 const N=T.length;
+/* language: the Hindi wording from content.js replaces the English that sits in index.html */
+document.documentElement.lang=LANG;
+if(LANG==='hi'){document.title=HI.title;for(const q in HI.html)document.querySelectorAll(q).forEach(e=>e.innerHTML=HI.html[q]);}
 const BJ=['ॐ','लं','वं','रं','यं','हं','ॐ','०','ॐ','ॐ'];
 T.forEach((t,i)=>{t.b=BJ[i];t.tip=TIP[i];const n=parseInt(t.c.slice(1),16);t.rgb=[(n>>16)/255,(n>>8&255)/255,(n&255)/255];});
 const ph=document.getElementById('panels'),nav=document.getElementById('nav');
 T.forEach((t,i)=>{
   if(i){const s=document.createElement('section');s.className='panel';s.style.setProperty('--c',t.c);
-    s.innerHTML=`<div class="bija">${t.b}</div><div class="count">${t.cnt||'TATTVA 0'+i+' / 05'}</div><h2 class="deva">${t.d}</h2>
+    s.innerHTML=`<div class="bija">${t.b}</div><div class="count">${t.cnt||S.tattva+' 0'+i+' / 05'}</div><h2 class="deva">${t.d}</h2>
     <div class="name">${t.k} <span>— ${t.e.toUpperCase()}</span></div><p class="line">${t.l}</p>
-    <div class="meta">${t.m.map(m=>`<div><small>${m[0]}</small><b>${m[1]}</b></div>`).join('')}</div><div class="tip">✦ ${t.tip}</div>${t.k==='EKAM'?'<div class="btns"><button id="again">↺ RETURN TO SOURCE</button><button id="cap2">⤓ CAPTURE THIS VIEW</button></div>':''}`;
+    <div class="meta">${t.m.map(m=>`<div><small>${m[0]}</small><b>${m[1]}</b></div>`).join('')}</div><div class="tip">✦ ${t.tip}</div>${t.k==='EKAM'?'<div class="btns"><button id="again">${S.again}</button><button id="cap2">${S.cap2}</button></div>':''}`;
     ph.appendChild(s);}
   const a=document.createElement('a');a.style.setProperty('--c',t.c);a.innerHTML=`<span>${t.k}</span><i></i>`;
   a.onclick=()=>go(i);nav.appendChild(a);
@@ -21,15 +24,15 @@ const panels=[...document.querySelectorAll('.panel')],dots=[...nav.children];
 /* sangam: the mixer (results are in content.js) */
 const h2r=h=>{const n=parseInt(h.slice(1),16);return[(n>>16)/255,(n>>8&255)/255,(n&255)/255];};
 const mp=panels[N-1];mp.classList.add('mix');
-mp.innerHTML=`<div class="count">SANGAM · CHOOSE ANY TWO</div>
+mp.innerHTML=`<div class="count">${S.mixHead}</div>
  <div class="chips">${T.slice(1,8).map((t,i)=>`<button class="chip" data-i="${i+1}" style="--c:${t.c}"><b>${t.d}</b>${t.e}</button>`).join('')}</div>
  <div class="eq" id="mxe"></div><h2 class="deva" id="mxd"></h2><div class="name" id="mxn"></div><p class="line" id="mxl"></p>
- <div class="tip">✦ 21 COMBINATIONS · MOVE TO STIR</div>`;
+ <div class="tip">✦ ${S.mixTip}</div>`;
 let mixSel=[3,2],mixT=null,mixCur=null;
 function setMix(){const a=Math.min(mixSel[0],mixSel[1]),b=Math.max(mixSel[0],mixSel[1]),m=MIX[''+a+b];
   mixT=[...h2r(m[4]),...h2r(m[5]),...h2r(m[6]),...m[7],...m[8],m[9]];if(!mixCur)mixCur=mixT.slice();
   mp.style.setProperty('--c',m[6]);T[N-1].c=m[6];T[N-1].rgb=h2r(m[6]);T[N-1].d=m[0];T[N-1].k=m[1].toUpperCase();T[N-1].e=m[2];
-  document.getElementById('mxe').textContent=T[a].k+'  +  '+T[b].k+'  =';
+  document.getElementById('mxe').textContent=(LANG==='hi'?T[a].d+'  +  '+T[b].d:T[a].k+'  +  '+T[b].k)+'  =';
   document.getElementById('mxd').textContent=m[0];
   document.getElementById('mxn').innerHTML=m[1].toUpperCase()+' <span>— '+m[2].toUpperCase()+'</span>';
   document.getElementById('mxl').textContent=m[3];
@@ -63,7 +66,7 @@ if(gl){
     if(++bi<N)setTimeout(next,30);})();
   canvas.addEventListener('webglcontextlost',e=>e.preventDefault());
   canvas.addEventListener('webglcontextrestored',()=>location.reload());
-}else{document.getElementById('load').innerHTML='<div>WEBGL IS NOT AVAILABLE IN THIS BROWSER</div>';}
+}else{document.getElementById('load').innerHTML='<div>'+S.noGl+'</div>';}
 document.querySelectorAll('header a,nav a').forEach(a=>{a.tabIndex=0;a.setAttribute('role','button');
   a.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();a.click();}});});
 
@@ -74,6 +77,8 @@ function resize(){const dpr=Math.min(devicePixelRatio||1,coarse?1.25:1.5);
   canvas.width=W;canvas.height=H;gl&&gl.viewport(0,0,W,H);
   secH=Math.max(1,innerHeight*1.7);document.getElementById('track').style.height=(secH*(N-1)+innerHeight*1.9)+'px';}
 resize();
+// a language switch reloads the page; carry on from the same scene
+try{const y=sessionStorage.getItem('pt-y');if(y!==null){sessionStorage.removeItem('pt-y');scrollTo(0,y*secH);}}catch(e){}
 
 let mx=0,my=0,smx=0,smy=0,sy=scrollY,auto=false,ckx=0,cky=0,ckt=-100,vel=0,capReq=false,dhy=false,dhyT=0;
 addEventListener('pointerdown',e=>{if(e.target.closest('a,button,#jn,#pr,#prb'))return;
@@ -85,7 +90,7 @@ addEventListener('pointermove',e=>{mx=e.clientX/innerWidth*2-1;my=1-e.clientY/in
   mv=Math.min(1,mv+Math.hypot(nx-dtx,ny-dty)*4);dtx=nx;dty=ny;});
 ['pointerup','pointercancel','blur'].forEach(ev=>addEventListener(ev,()=>{down=false;}));
 function go(i){scrollTo({top:i*secH+(i?secH*.12:0),behavior:'smooth'});}
-const stopAuto=()=>{if(auto){auto=false;autoBtn.textContent='▶ JOURNEY';}};
+const stopAuto=()=>{if(auto){auto=false;autoBtn.textContent=S.journey;}};
 ['wheel','touchstart','keydown'].forEach(ev=>addEventListener(ev,stopAuto,{passive:true}));
 addEventListener('keydown',e=>{const cur=Math.round(scrollY/secH-.12);
   if(e.key==='ArrowRight'||e.key==='PageDown'){go(Math.min(N-1,cur+1));e.preventDefault();}
@@ -93,10 +98,10 @@ addEventListener('keydown',e=>{const cur=Math.round(scrollY/secH-.12);
   const k=e.key.toLowerCase();if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(k==='h')togglePure();if(k==='f')toggleFull();if(k==='c')capReq=true;if(k==='d')toggleDhy();if(k==='k')toggleKn();if(k==='l')cycleTod();if(k==='p')document.body.classList.contains('pr')?closePr():openPr();
   if(e.key==='Escape'){document.body.classList.remove('pure','pr');if(dhy)toggleDhy();}});
-function togglePure(){if(document.body.classList.toggle('pure'))toast('PRESS H TO BRING THE INTERFACE BACK');}
-function toggleFull(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>toast('FULLSCREEN IS NOT AVAILABLE HERE'));}
+function togglePure(){if(document.body.classList.toggle('pure'))toast(S.pure);}
+function toggleFull(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>toast(S.noFs));}
 function toggleDhy(){dhy=!dhy;dhyT=performance.now()*.001;if(!dhy&&sess)endSess(false);document.body.classList.toggle('dhyana',dhy);
-  document.getElementById('dh').textContent=dhy?'◉ RETURN':'◉ DHYANA';if(dhy){stopAuto();toast('FOLLOW THE CIRCLE WITH YOUR BREATH');}}
+  document.getElementById('dh').textContent=dhy?S.ret:S.dhyana;if(dhy){stopAuto();toast(S.follow);}}
 const jn=document.getElementById('jn');let knI=-1;
 function setKn(i){if(i===knI)return;knI=i;jn.classList.add('sw');document.getElementById('gd').textContent=KN[i][2];
   setTimeout(()=>{for(let k=0;k<3;k++)document.getElementById('jn'+k).textContent=KN[knI][k];jn.classList.remove('sw');},300);}
@@ -105,13 +110,16 @@ let knPref=null;try{knPref=localStorage.getItem('st-kn');}catch(e){}
 if(knPref===null?innerWidth>=1100:knPref==='1')document.body.classList.add('kn');
 document.getElementById('kn').onclick=document.getElementById('jnx').onclick=document.getElementById('jno').onclick=toggleKn;
 
+const lg=document.getElementById('lg');lg.textContent=S.other;lg.lang=LANG==='hi'?'en':'hi';
+lg.onclick=()=>{const l=LANG==='hi'?'en':'hi';try{localStorage.setItem('pt-lang',l);sessionStorage.setItem('pt-y',scrollY/secH);}catch(e){}
+  location.search='?lang='+l;};
 document.getElementById('dh').onclick=toggleDhy;document.getElementById('fs').onclick=toggleFull;
 document.getElementById('cap').onclick=document.getElementById('cap2').onclick=()=>{capReq=true;};
 document.getElementById('again').onclick=()=>go(0);
 const autoBtn=document.getElementById('auto'),resBtn=document.getElementById('res');let journeyStarted=false,resOn=false;
 // The header's Journey link is hidden on phones, so a paused journey gets its own button to carry on from where it stopped.
 resBtn.onclick=()=>startAuto();
-function startAuto(){auto=true;journeyStarted=true;autoBtn.textContent='❚❚ PAUSE';if(scrollY>secH*(N-1))scrollTo(0,0);}
+function startAuto(){auto=true;journeyStarted=true;autoBtn.textContent=S.pause;if(scrollY>secH*(N-1))scrollTo(0,0);}
 autoBtn.onclick=()=>auto?stopAuto():startAuto();
 document.getElementById('begin').onclick=()=>{startAuto();startSound();};
 
@@ -125,7 +133,7 @@ function setScape(i){if(!ac)return;const z=NZ[i],t=ac.currentTime;nf.type=z[0];
   nf.frequency.setTargetAtTime(z[1],t,.7);nf.Q.setTargetAtTime(z[2],t,.7);ng.gain.setTargetAtTime(z[3]*.5,t,.7);
   nl.frequency.setTargetAtTime(z[4],t,.3);nlg.gain.setTargetAtTime(z[5],t,.7);
   oscs.forEach(([o,m])=>o.frequency.setTargetAtTime(T[i].f*m,t,.9));}
-function startSound(){if(sndOn)return;sndOn=true;sndBtn.textContent='♪ MUTE';
+function startSound(){if(sndOn)return;sndOn=true;sndBtn.textContent=S.mute;
   if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();out=ac.createGain();out.gain.value=0;out.connect(ac.destination);
     const master=ac.createGain();master.gain.value=.11;
     const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;master.connect(lp);lp.connect(out);
@@ -137,34 +145,34 @@ function startSound(){if(sndOn)return;sndOn=true;sndBtn.textContent='♪ MUTE';
     src.connect(nf);nf.connect(ng);ng.connect(out);src.start();
     nl=ac.createOscillator();nlg=ac.createGain();nlg.gain.value=0;nl.connect(nlg);nlg.connect(nf.frequency);nl.start();}
   ac.resume();out.gain.setTargetAtTime(1,ac.currentTime,.8);setScape(Math.max(0,active));}
-function stopSound(){sndOn=false;sndBtn.textContent='♪ SOUND';out.gain.setTargetAtTime(0,ac.currentTime,.25);}
+function stopSound(){sndOn=false;sndBtn.textContent=S.sound;out.gain.setTargetAtTime(0,ac.currentTime,.25);}
 sndBtn.onclick=()=>sndOn?stopSound():startSound();
 
 /* time of day: the outdoor scenes follow the visitor's clock, or a chosen hour */
-const TOD=[['LIVE',null],['DAWN',6.3],['NOON',12.5],['DUSK',17.85],['NIGHT',23]];
+const TOD=[null,6.3,12.5,17.85,23];   // live, dawn, noon, dusk, night
 const liveHour=()=>{const d=new Date();return d.getHours()+d.getMinutes()/60;};
 let todI=0,hourCur=liveHour();const todBtn=document.getElementById('tod');
 function todLabel(){const d=new Date(),m=d.getMinutes();
-  todBtn.textContent='◐ '+(todI?TOD[todI][0]:'LIVE · '+d.getHours()+':'+(m<10?'0':'')+m);}
-function cycleTod(){todI=(todI+1)%TOD.length;todLabel();toast(todI?'TIME OF DAY · '+TOD[todI][0]:'TIME OF DAY · FOLLOWING YOUR CLOCK');}
+  todBtn.textContent='◐ '+(todI?S.tod[todI]:S.tod[0]+' · '+d.getHours()+':'+(m<10?'0':'')+m);}
+function cycleTod(){todI=(todI+1)%TOD.length;todLabel();toast(todI?S.todIs+S.tod[todI]:S.todLive);}
 todBtn.onclick=cycleTod;todLabel();
 
 /* daily practice: one element a day, a timed session, a streak kept on this device */
 const tz=new Date().getTimezoneOffset()*6e4,dayN=Math.floor((Date.now()-tz)/864e5),dkey=n=>new Date(n*864e5).toISOString().slice(0,10);
-const todayI=1+dayN%7,cap1=w=>w[0]+w.slice(1).toLowerCase();
+const todayI=1+dayN%7;
 let pd={days:{},sessions:0,minutes:0};try{const r=JSON.parse(localStorage.getItem('pt-practice'));if(r&&r.days)pd=r;}catch(e){}
 let prMin=5,sess=null;
 function streak(){let n=0,d=dayN;if(!pd.days[dkey(d)])d--;while(pd.days[dkey(d)]){n++;d--;}return n;}
-function updTdb(){const n=streak();document.getElementById('tdb').textContent=pd.days[dkey(dayN)]?'✓ PRACTISED TODAY · '+n+'-DAY STREAK':n?"TODAY'S PRACTICE · "+n+'-DAY STREAK':"TODAY'S PRACTICE";}
+function updTdb(){const n=streak();document.getElementById('tdb').textContent=pd.days[dkey(dayN)]?S.tdbDone(n):n?S.tdbStreak(n):S.tdb;}
 function renderPr(done){const t=T[todayI],n=streak(),pr=document.getElementById('pr');pr.style.setProperty('--pc',t.c);
-  let wk='';for(let d=dayN-6;d<=dayN;d++)wk+=`<span><i class="${pd.days[dkey(d)]?'d':''}${d===dayN?' t':''}"></i>${'SMTWTFS'[new Date(d*864e5).getUTCDay()]}</span>`;
-  const head=done?'PRACTICE COMPLETE':'TODAY · '+new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
-  const body=done?'Well done. Tomorrow’s practice is '+cap1(T[1+(dayN+1)%7].k)+'.':KN[todayI][2];
+  let wk='';for(let d=dayN-6;d<=dayN;d++)wk+=`<span><i class="${pd.days[dkey(d)]?'d':''}${d===dayN?' t':''}"></i>${S.wd[new Date(d*864e5).getUTCDay()]}</span>`;
+  const head=done?S.prDone:S.prToday+new Date().toLocaleDateString(S.loc,{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+  const body=done?S.wellDone(T[1+(dayN+1)%7]):KN[todayI][2];
   pr.innerHTML=`<button id="prx" aria-label="Close">×</button><small>${head}</small><h3>${t.d}</h3><div class="nm">${t.k} — ${t.e.toUpperCase()}</div><p>${body}</p>
-   ${done?'':`<div class="durs">${[3,5,10].map(m=>`<button class="dur${m===prMin?' on':''}" data-m="${m}">${m} MIN</button>`).join('')}</div>
-   <button id="prgo">${pd.days[dkey(dayN)]?'PRACTISE AGAIN':'BEGIN PRACTICE'}</button>`}
-   <div class="wk">${wk}</div><div class="st">${n}-DAY STREAK · ${pd.sessions} SESSION${pd.sessions===1?'':'S'} · ${pd.minutes} MIN</div>
-   <small class="nt">SAVED ON THIS DEVICE ONLY</small>`;
+   ${done?'':`<div class="durs">${[3,5,10].map(m=>`<button class="dur${m===prMin?' on':''}" data-m="${m}">${m} ${S.min}</button>`).join('')}</div>
+   <button id="prgo">${pd.days[dkey(dayN)]?S.prAgain:S.prBegin}</button>`}
+   <div class="wk">${wk}</div><div class="st">${S.stats(n,pd.sessions,pd.minutes)}</div>
+   <small class="nt">${S.saved}</small>`;
   document.getElementById('prx').onclick=closePr;
   if(!done){pr.querySelectorAll('.dur').forEach(b=>b.onclick=()=>{prMin=+b.dataset.m;renderPr();});document.getElementById('prgo').onclick=beginSess;}
   updTdb();}
@@ -176,7 +184,7 @@ function beginSess(){closePr();document.body.classList.remove('pure');scrollTo(0
 function endSess(done){const z=sess;sess=null;if(!z)return;if(z.lock)z.lock.release().catch(()=>{});
   if(done){const k=dkey(dayN);pd.days[k]=(pd.days[k]||0)+z.min;pd.sessions++;pd.minutes+=z.min;
     try{localStorage.setItem('pt-practice',JSON.stringify(pd));}catch(e){}
-    bell();if(dhy)toggleDhy();openPr(true);}else toast('SESSION ENDED EARLY · NOT COUNTED');}
+    bell();if(dhy)toggleDhy();openPr(true);}else toast(S.early);}
 function bell(){if(!ac||!sndOn)return;const t=ac.currentTime;[[432,.22],[1192,.07],[2333,.03]].forEach(([f,g])=>{const o=ac.createOscillator(),gn=ac.createGain();
   o.frequency.value=f;gn.gain.setValueAtTime(g,t);gn.gain.exponentialRampToValueAtTime(.0001,t+5);o.connect(gn);gn.connect(ac.destination);o.start(t);o.stop(t+5.2);});}
 document.getElementById('td').onclick=document.getElementById('tdb').onclick=()=>openPr();
@@ -195,11 +203,11 @@ function doCapture(idx,blend,time){const cw=Math.min(2560,Math.round(innerWidth*
   const c2=document.createElement('canvas');c2.width=cw;c2.height=ch;const x=c2.getContext('2d');x.drawImage(canvas,0,0);
   const t=T[Math.max(0,active)],u=ch/100;x.shadowColor='rgba(0,0,0,.7)';x.shadowBlur=3*u;x.fillStyle='#fff';
   x.font=`${17*u}px 'Tiro Devanagari Sanskrit','Nirmala UI',serif`;x.fillText(t.d,7*u,78*u);
-  x.font=`${2.6*u}px Cinzel,serif`;try{x.letterSpacing=`${1.1*u}px`;}catch(e){}
+  x.font=`${2.6*u}px Cinzel,Mukta,'Nirmala UI',serif`;try{x.letterSpacing=`${(LANG==='hi'?.3:1.1)*u}px`;}catch(e){}
   x.fillText(t.k+(t.e?'  —  '+t.e.toUpperCase():''),7.4*u,85.5*u);
   x.font=`${1.3*u}px Cinzel,serif`;x.globalAlpha=.75;x.fillText('PANCHA TATTVA  ·  THE FIVE ELEMENTS AND BEYOND',7.4*u,7*u);
   c2.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pancha-tattva-'+t.k.toLowerCase()+'.png';
-    document.body.appendChild(a);a.click();a.remove();toast('IMAGE SAVED · '+cw+' × '+ch);},'image/png');
+    document.body.appendChild(a);a.click();a.remove();toast(S.imgSaved+cw+' × '+ch);},'image/png');
   resize();last=performance.now();}
 const ring=document.getElementById('ring'),btxt=document.getElementById('btxt'),bj=document.getElementById('bj');
 let last=performance.now(),ema=16,fc=0,active=-1;let lastIH=innerHeight,lastIW=innerWidth;
@@ -210,14 +218,14 @@ function frame(now){requestAnimationFrame(frame);
     if(ns!==scale){scale=ns;resize();}}
   if(auto){scrollBy(0,secH*dt/11000);if(scrollY>=document.documentElement.scrollHeight-innerHeight-2)stopAuto();}
   sy+=(scrollY-sy)*Math.min(1,dt*.006);smx+=(mx-smx)*.04;smy+=(my-smy)*.04;
-  {const ht=todI?TOD[todI][1]:liveHour(),dh=((ht-hourCur+36)%24)-12;hourCur=(hourCur+dh*Math.min(1,dt*.0025)+24)%24;if(!todI&&fc%240===0)todLabel();}
+  {const ht=todI?TOD[todI]:liveHour(),dh=((ht-hourCur+36)%24)-12;hourCur=(hourCur+dh*Math.min(1,dt*.0025)+24)%24;if(!todI&&fc%240===0)todLabel();}
   mv*=.95;force+=((down?1:Math.min(.75,mv))-force)*.07;dgx+=(dtx-dgx)*.12;dgy+=(dty-dgy)*.12;
   for(let i=0;i<18;i++)mixCur[i]+=(mixT[i]-mixCur[i])*.06;
   const pos=Math.max(0,Math.min(N-1+.6,sy/secH)),idx=Math.min(N-1,Math.floor(pos)),f=pos-idx;
   const blend=idx<N-1?ss(.7,1,f):0,time=now*.001;
   vel+=(Math.max(-1,Math.min(1,(scrollY-sy)/secH*2.2))-vel)*.1;if(!isFinite(vel))vel=0;if(!isFinite(sy))sy=scrollY;
   if(gl){if(capReq){capReq=false;doCapture(idx,blend,time);}render(idx,blend,time);}
-  if(dhy){const c=(time-dhyT)%14;let b,tx;if(c<4){b=c/4;tx='BREATHE IN';}else if(c<8){b=1;tx='HOLD';}else{b=1-(c-8)/6;tx='BREATHE OUT';}
+  if(dhy){const c=(time-dhyT)%14;let b,tx;if(c<4){b=c/4;tx=S.breath[0];}else if(c<8){b=1;tx=S.breath[1];}else{b=1-(c-8)/6;tx=S.breath[2];}
     if(sess){const r=sess.end-time;if(r<=0)endSess(true);else{const m=Math.floor(r/60),sc=Math.floor(r%60);tx+='  ·  '+m+':'+(sc<10?'0':'')+sc;}}
     b=b*b*(3-2*b);ring.style.transform=`scale(${.45+.55*b})`;if(btxt.textContent!==tx)btxt.textContent=tx;}
   panels.forEach((el,i)=>{const d=pos-i;const o=ss(-.22,-.03,d)*(1-ss(.46,.68,d))*(i===N-1&&d>0?1:1);
@@ -229,7 +237,7 @@ function frame(now){requestAnimationFrame(frame);
   if(cur!==active){active=cur;dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
     document.body.style.setProperty('--accent',T[cur].c);bj.textContent=T[cur].b;setKn(cur);if(sndOn)setScape(cur);}
   {const show=!auto&&pos>.25&&pos<N-1.05&&(journeyStarted||innerWidth<=700);
-    if(show!==resOn){resOn=show;resBtn.textContent=journeyStarted?'▶ RESUME JOURNEY':'▶ PLAY JOURNEY';resBtn.classList.toggle('on',show);}}
+    if(show!==resOn){resOn=show;resBtn.textContent=journeyStarted?S.resume:S.play;resBtn.classList.toggle('on',show);}}
   bar.style.transform=`scaleX(${Math.min(1,pos/(N-1))})`;hint.style.opacity=pos<.25?.7:0;
 }
 setMix();

@@ -32,6 +32,16 @@ then open http://localhost:8123.
 The three scripts are plain files loaded in order (content, shaders, app), not modules, so the
 site also works when opened directly from disk.
 
+## Languages
+
+The site is in English and Hindi. The header link switches between them and the choice is
+remembered on that device. A visitor whose browser is set to Hindi gets Hindi on the first
+visit, and adding `?lang=hi` (or `?lang=en`) to the address opens the site in that language,
+which is useful when sharing a link.
+
+Both sets of wording are in `js/content.js`: the English at the top, the Hindi in the `HI` block,
+and the short interface labels for both in `UI`.
+
 ## One-file copy
 
     python tools/build_single.py
@@ -55,4 +65,5 @@ there is no connection, so no version bump is needed after a change.
 - Fonts load from Google Fonts and are saved for offline use after the first visit; before that,
   the Sanskrit text falls back to a system font.
 - The scripture quotations and references in `js/content.js` have not yet been reviewed by
-  someone who knows the source texts.
+  someone who knows the source texts. The same goes for the Hindi wording, which has not been
+  read by a native Hindi editor.
