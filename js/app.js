@@ -108,8 +108,10 @@ document.getElementById('kn').onclick=document.getElementById('jnx').onclick=doc
 document.getElementById('dh').onclick=toggleDhy;document.getElementById('fs').onclick=toggleFull;
 document.getElementById('cap').onclick=document.getElementById('cap2').onclick=()=>{capReq=true;};
 document.getElementById('again').onclick=()=>go(0);
-const autoBtn=document.getElementById('auto');
-function startAuto(){auto=true;autoBtn.textContent='❚❚ PAUSE';if(scrollY>secH*(N-1))scrollTo(0,0);}
+const autoBtn=document.getElementById('auto'),resBtn=document.getElementById('res');let journeyStarted=false,resOn=false;
+// The header's Journey link is hidden on phones, so a paused journey gets its own button to carry on from where it stopped.
+resBtn.onclick=()=>startAuto();
+function startAuto(){auto=true;journeyStarted=true;autoBtn.textContent='❚❚ PAUSE';if(scrollY>secH*(N-1))scrollTo(0,0);}
 autoBtn.onclick=()=>auto?stopAuto():startAuto();
 document.getElementById('begin').onclick=()=>{startAuto();startSound();};
 
@@ -226,6 +228,8 @@ function frame(now){requestAnimationFrame(frame);
   const cur=Math.max(0,Math.min(N-1,Math.round(pos-.2)))||0;
   if(cur!==active){active=cur;dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
     document.body.style.setProperty('--accent',T[cur].c);bj.textContent=T[cur].b;setKn(cur);if(sndOn)setScape(cur);}
+  {const show=!auto&&pos>.25&&pos<N-1.05&&(journeyStarted||innerWidth<=700);
+    if(show!==resOn){resOn=show;resBtn.textContent=journeyStarted?'▶ RESUME JOURNEY':'▶ PLAY JOURNEY';resBtn.classList.toggle('on',show);}}
   bar.style.transform=`scaleX(${Math.min(1,pos/(N-1))})`;hint.style.opacity=pos<.25?.7:0;
 }
 setMix();

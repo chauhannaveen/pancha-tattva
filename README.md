@@ -45,8 +45,8 @@ The preview-image tags in `index.html` (`og:url`, `og:image`, `twitter:image`) c
 address `https://chauhannaveen.github.io/pancha-tattva/`. Update them if the site moves to
 another domain.
 
-After changing any file, bump `CACHE` in `sw.js` (for example to `pancha-tattva-v2`) if returning
-visitors must get the new version immediately; otherwise they get it on their second visit.
+Visitors who are online always get the latest files; the saved offline copy is only used when
+there is no connection, so no version bump is needed after a change.
 
 ## Notes
 

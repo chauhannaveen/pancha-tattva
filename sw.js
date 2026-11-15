@@ -1,7 +1,7 @@
-/* Offline support. The site's own files are saved on first visit and served from that copy,
-   while a fresh copy is fetched in the background for next time. Fonts are saved the same way.
-   Change CACHE to force every visitor onto a clean copy. */
-const CACHE = 'pancha-tattva-v1';
+/* Offline support. Online, the site's own files always come fresh from the network and a copy
+   is saved; offline, that saved copy is used. Fonts rarely change, so they are served from the
+   saved copy first. Change CACHE only to wipe every visitor's saved copy. */
+const CACHE = 'pancha-tattva-v2';
 const SHELL = ['./', 'index.html', 'css/styles.css', 'js/content.js', 'js/shaders.js', 'js/app.js',
   'manifest.webmanifest', 'assets/icon.svg', 'assets/icon-192.png', 'assets/icon-512.png'];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
@@ -21,12 +21,14 @@ self.addEventListener('fetch', e => {
   const ours = url.origin === location.origin, font = FONT_HOSTS.includes(url.hostname);
   if (e.request.method !== 'GET' || !(ours || font)) return;
   e.respondWith(caches.open(CACHE).then(async cache => {
-    const saved = await cache.match(e.request, { ignoreSearch: ours });
-    const fresh = fetch(e.request).then(res => {
-      if (res.ok || res.type === 'opaque') cache.put(e.request, res.clone());
-      return res;
-    });
-    if (saved) { fresh.catch(() => {}); return saved; }
-    return fresh;
+    const save = res => { if (res.ok || res.type === 'opaque') cache.put(e.request, res.clone()); return res; };
+    if (font) return (await cache.match(e.request)) || fetch(e.request).then(save);
+    try {
+      return save(await fetch(e.request));
+    } catch (err) {
+      const saved = await cache.match(e.request, { ignoreSearch: true });
+      if (saved) return saved;
+      throw err;
+    }
   }));
 });
