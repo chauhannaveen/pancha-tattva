@@ -110,7 +110,13 @@ const UI={
   wellDone:t=>'Well done. Tomorrow’s practice is '+t.k[0]+t.k.slice(1).toLowerCase()+'.',
   min:'MIN',prAgain:'PRACTISE AGAIN',prBegin:'BEGIN PRACTICE',
   stats:(n,s,m)=>n+'-DAY STREAK · '+s+' SESSION'+(s===1?'':'S')+' · '+m+' MIN',saved:'SAVED ON THIS DEVICE ONLY',
-  early:'SESSION ENDED EARLY · NOT COUNTED',imgSaved:'IMAGE SAVED · '},
+  early:'SESSION ENDED EARLY · NOT COUNTED',imgSaved:'IMAGE SAVED · ',
+  share:'SHARE',shareText:'The five elements, rendered live in your browser.',copied:'LINK COPIED',noCopy:'COULD NOT COPY THE LINK',
+  abHead:'ABOUT',abSrc:'PROJECT PAGE · SOURCE CODE',abBy:'BUILT WITH CLAUDE',abP:[
+   'A journey through the five great elements of Indian thought — earth, water, fire, air and ether — and the mind and consciousness that tradition places beyond them.',
+   'Every scene is drawn live by your device’s graphics chip, many times a second. There are no photographs and no video: the mountains, ocean, flames and stars are all mathematics.',
+   'The quotations are from the Vedas and Upanishads, with references beside each. If you spot an error, please report it on the project page.',
+   'Your practice streak stays on this device only. It is not sent anywhere.']},
  hi:{other:'ENGLISH',loc:'hi-IN',tattva:'तत्त्व',again:'↺ स्रोत पर लौटें',cap2:'⤓ यह दृश्य सहेजें',
   mixHead:'संगम · कोई दो चुनें',mixTip:'21 संयोग · हाथ घुमाकर मथें',noGl:'इस ब्राउज़र में WEBGL उपलब्ध नहीं है',
   journey:'▶ यात्रा',pause:'❚❚ रोकें',resume:'▶ यात्रा जारी रखें',play:'▶ यात्रा चलाएँ',
@@ -122,7 +128,13 @@ const UI={
   wellDone:t=>'बहुत अच्छे। कल का अभ्यास है '+t.d+'।',
   min:'मिनट',prAgain:'फिर अभ्यास करें',prBegin:'अभ्यास आरंभ करें',
   stats:(n,s,m)=>'लगातार '+n+' दिन · '+s+' सत्र · '+m+' मिनट',saved:'केवल इसी डिवाइस पर सुरक्षित',
-  early:'सत्र बीच में रुका · गिना नहीं गया',imgSaved:'चित्र सहेजा गया · '}
+  early:'सत्र बीच में रुका · गिना नहीं गया',imgSaved:'चित्र सहेजा गया · ',
+  share:'साझा करें',shareText:'पाँच तत्त्व, आपके ब्राउज़र में जीवंत।',copied:'लिंक कॉपी हो गया',noCopy:'लिंक कॉपी नहीं हो सका',
+  abHead:'परिचय',abSrc:'प्रोजेक्ट पृष्ठ · सोर्स कोड',abBy:'CLAUDE की सहायता से निर्मित',abP:[
+   'भारतीय चिंतन के पाँच महाभूतों — पृथ्वी, जल, अग्नि, वायु और आकाश — और उनसे परे माने गए मन तथा चेतना की एक यात्रा।',
+   'हर दृश्य आपके उपकरण की ग्राफ़िक्स चिप उसी क्षण रचती है, प्रति सेकंड कई बार। यहाँ कोई तस्वीर या वीडियो नहीं है: पर्वत, सागर, ज्वाला और तारे — सब गणित हैं।',
+   'उद्धरण वेदों और उपनिषदों से हैं, और संदर्भ उनके साथ दिए गए हैं। कोई त्रुटि दिखे तो कृपया प्रोजेक्ट पृष्ठ पर बताएँ।',
+   'आपका अभ्यास-क्रम केवल इसी डिवाइस पर रहता है। इसे कहीं भेजा नहीं जाता।']}
 };
 const S=UI[LANG];
 
@@ -137,7 +149,7 @@ const HI={
   '#keys':'हाथ घुमाएँ · मथें &nbsp;&nbsp; क्लिक · लहर &nbsp;&nbsp; D · ध्यान &nbsp;&nbsp; K · ज्ञान &nbsp;&nbsp; P · अभ्यास &nbsp;&nbsp; L · समय &nbsp;&nbsp; H · इंटरफ़ेस छिपाएँ &nbsp;&nbsp; F · फ़ुलस्क्रीन &nbsp;&nbsp; C · चित्र &nbsp;&nbsp; ← → · यात्रा',
   '.hero .count':'पाँच तत्त्व · और उनसे परे दो',
   '.hero .line':'जो कुछ है, था या होगा, वह पाँच तत्त्वों से बुना है। उनके परे हैं देखने वाला मन और जानने वाली चेतना।',
-  '#begin':'यात्रा आरंभ करें'},
+  '#begin':'यात्रा आरंभ करें','#ab span':' परिचय'},
  T:[
   {},
   {e:'धरती',l:'पहली स्थिरता। पर्वत, अस्थि और बीज — वह धरा जो सबको धारण करती है और बदले में कुछ नहीं माँगती।',

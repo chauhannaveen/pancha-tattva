@@ -123,7 +123,7 @@ body.pure #res,body.dhyana #res,body.pr #res{opacity:0;pointer-events:none}
 #pr{--pc:#f4d9a0;position:fixed;left:50%;top:50%;transform:translate(-50%,-47%);width:min(440px,90vw);max-height:90vh;overflow:auto;z-index:8;
   padding:30px 30px 24px;border-radius:22px;background:rgba(8,8,16,.74);border:1px solid color-mix(in srgb,var(--pc) 50%,transparent);
   backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;text-align:center;display:grid;gap:12px;justify-items:center}
-body.pr #prb{opacity:1;pointer-events:auto}
+body.pr #prb,body.ab #prb{opacity:1;pointer-events:auto}
 body.pr #pr{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
 #pr small{font-family:'Cinzel','Mukta',serif;font-size:9px;letter-spacing:.36em;color:var(--pc)}
 #pr h3{font-family:'Tiro Devanagari Sanskrit','Nirmala UI',serif;font-weight:400;font-size:64px;line-height:1.15;text-shadow:0 0 40px var(--pc)}
@@ -169,3 +169,25 @@ html[lang=hi] .name span{font-size:.85em}
   html[lang=hi] :is(.count,.eq){font-size:14px}#lg{font-size:12px}}
 html[lang=hi] body{font-family:'Tiro Devanagari Hindi','Cormorant Garamond',Georgia,serif}
 header .r{align-items:baseline}
+/* share button and the About sheet */
+#shr{position:fixed;right:2.6vw;bottom:calc(3vh + 46px);z-index:5;padding:9px 14px;font-size:9px;letter-spacing:.24em;background:rgba(6,6,12,.42);
+  transition:opacity .6s,background .35s,color .35s}
+body.pure #shr,body.dhyana #shr,body.pr #shr,body.ab #shr,body.ab #res{opacity:0;pointer-events:none}
+#abt{position:fixed;left:50%;top:50%;transform:translate(-50%,-47%);width:min(480px,90vw);max-height:90vh;overflow:auto;z-index:8;
+  padding:30px 30px 24px;border-radius:22px;background:rgba(8,8,16,.8);border:1px solid color-mix(in srgb,var(--accent) 50%,transparent);
+  backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;text-align:center;display:grid;gap:12px;justify-items:center}
+body.ab #abt{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+#abt small{font-family:'Cinzel','Mukta',serif;font-size:9px;letter-spacing:.36em;color:var(--accent)}
+#abt small.nt{color:rgba(255,255,255,.45);letter-spacing:.22em}
+#abt h3{font-family:'Tiro Devanagari Sanskrit','Nirmala UI',serif;font-weight:400;font-size:46px;line-height:1.2;text-shadow:0 0 40px var(--accent)}
+#abt .nm{font-family:'Cinzel','Mukta',serif;letter-spacing:.4em;font-size:13px;margin-bottom:4px}
+#abt p{font-size:16px;line-height:1.45;font-weight:300;color:rgba(255,255,255,.93)}
+#abt a{font-family:'Cinzel','Mukta',serif;font-size:10px;letter-spacing:.26em;color:rgba(255,255,255,.75);text-underline-offset:4px}
+#abs{background:var(--accent);color:#000;border-color:var(--accent);width:100%;margin-top:4px}
+#abx{position:absolute;top:8px;right:8px;padding:0;width:30px;height:30px;border-radius:50%;font-size:17px;letter-spacing:0;line-height:1;
+  border-color:rgba(255,255,255,.25);background:transparent;font-family:Georgia,serif}
+html[lang=hi] #shr{font-size:13px;letter-spacing:.04em}
+html[lang=hi] #abt small,html[lang=hi] #abt a{font-size:13px;letter-spacing:.04em}
+html[lang=hi] #abt p{line-height:1.65;font-size:15px;font-weight:400}
+@media(max-width:700px){#shr span,#ab span{display:none}#shr{padding:8px 13px;font-size:14px;letter-spacing:0}#ab{font-size:13px!important}
+  #abt{padding:26px 22px 20px}#abt p{font-size:15px}}

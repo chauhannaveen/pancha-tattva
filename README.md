@@ -39,6 +39,9 @@ remembered on that device. A visitor whose browser is set to Hindi gets Hindi on
 visit, and adding `?lang=hi` (or `?lang=en`) to the address opens the site in that language,
 which is useful when sharing a link.
 
+A link can also open at one scene: add `#agni`, `#jala` and so on (the scene's name in lower
+case). The Share button builds such a link for the scene on screen.
+
 Both sets of wording are in `js/content.js`: the English at the top, the Hindi in the `HI` block,
 and the short interface labels for both in `UI`.
 

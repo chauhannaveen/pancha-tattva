@@ -2,7 +2,7 @@
    pointer input, sound, the mixer, wisdom cards, daily practice and time of day.
    Loads after content.js and shaders.js. */
 
-const N=T.length;
+const N=T.length,SLUG=T.map(t=>t.k.toLowerCase());   // scene names used in shared links, e.g. #agni
 /* language: the Hindi wording from content.js replaces the English that sits in index.html */
 document.documentElement.lang=LANG;
 if(LANG==='hi'){document.title=HI.title;for(const q in HI.html)document.querySelectorAll(q).forEach(e=>e.innerHTML=HI.html[q]);}
@@ -13,7 +13,7 @@ T.forEach((t,i)=>{
   if(i){const s=document.createElement('section');s.className='panel';s.style.setProperty('--c',t.c);
     s.innerHTML=`<div class="bija">${t.b}</div><div class="count">${t.cnt||S.tattva+' 0'+i+' / 05'}</div><h2 class="deva">${t.d}</h2>
     <div class="name">${t.k} <span>— ${t.e.toUpperCase()}</span></div><p class="line">${t.l}</p>
-    <div class="meta">${t.m.map(m=>`<div><small>${m[0]}</small><b>${m[1]}</b></div>`).join('')}</div><div class="tip">✦ ${t.tip}</div>${t.k==='EKAM'?'<div class="btns"><button id="again">${S.again}</button><button id="cap2">${S.cap2}</button></div>':''}`;
+    <div class="meta">${t.m.map(m=>`<div><small>${m[0]}</small><b>${m[1]}</b></div>`).join('')}</div><div class="tip">✦ ${t.tip}</div>${t.k==='EKAM'?'<div class="btns"><button id="again">${S.again}</button><button id="cap2">${S.cap2}</button><button id="shr2">↗ ${S.share}</button></div>':''}`;
     ph.appendChild(s);}
   const a=document.createElement('a');a.style.setProperty('--c',t.c);a.innerHTML=`<span>${t.k}</span><i></i>`;
   a.onclick=()=>go(i);nav.appendChild(a);
@@ -78,10 +78,11 @@ function resize(){const dpr=Math.min(devicePixelRatio||1,coarse?1.25:1.5);
   secH=Math.max(1,innerHeight*1.7);document.getElementById('track').style.height=(secH*(N-1)+innerHeight*1.9)+'px';}
 resize();
 // a language switch reloads the page; carry on from the same scene
-try{const y=sessionStorage.getItem('pt-y');if(y!==null){sessionStorage.removeItem('pt-y');scrollTo(0,y*secH);}}catch(e){}
+try{const y=sessionStorage.getItem('pt-y');if(y!==null){sessionStorage.removeItem('pt-y');scrollTo(0,y*secH);}
+  else{const i=SLUG.indexOf(location.hash.slice(1));if(i>0)scrollTo(0,i*secH+secH*.12);}}catch(e){}   // or open at a shared scene
 
 let mx=0,my=0,smx=0,smy=0,sy=scrollY,auto=false,ckx=0,cky=0,ckt=-100,vel=0,capReq=false,dhy=false,dhyT=0;
-addEventListener('pointerdown',e=>{if(e.target.closest('a,button,#jn,#pr,#prb'))return;
+addEventListener('pointerdown',e=>{if(e.target.closest('a,button,#jn,#pr,#prb,#abt'))return;
   ckx=(e.clientX-innerWidth/2)/innerHeight;cky=(innerHeight/2-e.clientY)/innerHeight;ckt=performance.now()*.001;down=true;dtx=ckx;dty=cky;});
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.opacity=1;clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.opacity=0,2600);}
 let dtx=0,dty=0,dgx=0,dgy=0,force=0,mv=0,down=false;
@@ -97,7 +98,7 @@ addEventListener('keydown',e=>{const cur=Math.round(scrollY/secH-.12);
   if(e.key==='ArrowLeft'||e.key==='PageUp'){go(Math.max(0,cur-1));e.preventDefault();}
   const k=e.key.toLowerCase();if(e.ctrlKey||e.metaKey||e.altKey)return;
   if(k==='h')togglePure();if(k==='f')toggleFull();if(k==='c')capReq=true;if(k==='d')toggleDhy();if(k==='k')toggleKn();if(k==='l')cycleTod();if(k==='p')document.body.classList.contains('pr')?closePr():openPr();
-  if(e.key==='Escape'){document.body.classList.remove('pure','pr');if(dhy)toggleDhy();}});
+  if(e.key==='Escape'){document.body.classList.remove('pure','pr','ab');if(dhy)toggleDhy();}});
 function togglePure(){if(document.body.classList.toggle('pure'))toast(S.pure);}
 function toggleFull(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>toast(S.noFs));}
 function toggleDhy(){dhy=!dhy;dhyT=performance.now()*.001;if(!dhy&&sess)endSess(false);document.body.classList.toggle('dhyana',dhy);
@@ -176,7 +177,7 @@ function renderPr(done){const t=T[todayI],n=streak(),pr=document.getElementById(
   document.getElementById('prx').onclick=closePr;
   if(!done){pr.querySelectorAll('.dur').forEach(b=>b.onclick=()=>{prMin=+b.dataset.m;renderPr();});document.getElementById('prgo').onclick=beginSess;}
   updTdb();}
-function openPr(done){stopAuto();renderPr(done===true);document.body.classList.add('pr');}
+function openPr(done){stopAuto();closeAb();renderPr(done===true);document.body.classList.add('pr');}
 function closePr(){document.body.classList.remove('pr');}
 function beginSess(){closePr();document.body.classList.remove('pure');scrollTo(0,todayI*secH+secH*.12);sy=scrollY;if(!dhy)toggleDhy();
   dhyT=performance.now()*.001;sess={end:dhyT+prMin*60,min:prMin};startSound();
@@ -188,7 +189,24 @@ function endSess(done){const z=sess;sess=null;if(!z)return;if(z.lock)z.lock.rele
 function bell(){if(!ac||!sndOn)return;const t=ac.currentTime;[[432,.22],[1192,.07],[2333,.03]].forEach(([f,g])=>{const o=ac.createOscillator(),gn=ac.createGain();
   o.frequency.value=f;gn.gain.setValueAtTime(g,t);gn.gain.exponentialRampToValueAtTime(.0001,t+5);o.connect(gn);gn.connect(ac.destination);o.start(t);o.stop(t+5.2);});}
 document.getElementById('td').onclick=document.getElementById('tdb').onclick=()=>openPr();
-document.getElementById('prb').onclick=closePr;updTdb();
+document.getElementById('prb').onclick=()=>{closePr();closeAb();};updTdb();
+
+/* share: the phone's own share sheet where there is one, otherwise the link is copied */
+function share(){const i=Math.max(0,Math.min(N-1,Math.round(scrollY/secH-.2)))||0,url=location.href.split(/[?#]/)[0]+'?lang='+LANG+(i?'#'+SLUG[i]:'');
+  const d={title:'Pancha Tattva',text:(i?T[i].d+' · ':'')+S.shareText,url};
+  if(navigator.share)navigator.share(d).catch(()=>{});
+  else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast(S.copied),()=>toast(S.noCopy));else toast(S.noCopy);}
+document.getElementById('shr').innerHTML='↗<span> '+S.share+'</span>';
+document.getElementById('shr').onclick=document.getElementById('shr2').onclick=share;
+
+/* about */
+const abt=document.getElementById('abt');
+abt.innerHTML=`<button id="abx" aria-label="Close">×</button><small>${S.abHead}</small><h3>पञ्च तत्त्व</h3><div class="nm">PANCHA TATTVA</div>
+ ${S.abP.map(p=>`<p>${p}</p>`).join('')}<button id="abs">↗ ${S.share}</button>
+ <a href="https://github.com/chauhannaveen/pancha-tattva" target="_blank" rel="noopener">${S.abSrc}</a><small class="nt">${S.abBy}</small>`;
+function openAb(){stopAuto();closePr();document.body.classList.add('ab');}
+function closeAb(){document.body.classList.remove('ab');}
+document.getElementById('ab').onclick=openAb;document.getElementById('abx').onclick=closeAb;document.getElementById('abs').onclick=share;
 
 const ss=(a,b,x)=>{x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x);};
 const bar=document.getElementById('bar'),hint=document.getElementById('hint');
