@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="72%">
+      <stop offset="0" stop-color="#2a1a55"/>
+      <stop offset=".55" stop-color="#120a2a"/>
+      <stop offset="1" stop-color="#04020a"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset=".45" stop-color="#ffd98a"/>
+      <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#b9a6ff" stroke-opacity=".35" stroke-width="2"/>
+  <!-- the five elements: earth, water, fire, air, ether -->
+  <g filter="url(#glow)" opacity=".9">
+    <circle cx="256" cy="106" r="44" fill="#e9b872"/>
+    <circle cx="398.7" cy="209.6" r="44" fill="#4fb0ff"/>
+    <circle cx="344.2" cy="377.4" r="44" fill="#ff7a3c"/>
+    <circle cx="167.8" cy="377.4" r="44" fill="#bfe4ff"/>
+    <circle cx="113.3" cy="209.6" r="44" fill="#9a8cff"/>
+  </g>
+  <circle cx="256" cy="106" r="30" fill="#f6d39a"/>
+  <circle cx="398.7" cy="209.6" r="30" fill="#8fd0ff"/>
+  <circle cx="344.2" cy="377.4" r="30" fill="#ffa066"/>
+  <circle cx="167.8" cy="377.4" r="30" fill="#e6f5ff"/>
+  <circle cx="113.3" cy="209.6" r="30" fill="#c0b6ff"/>
+  <!-- what lies beyond them -->
+  <circle cx="256" cy="256" r="120" fill="url(#core)"/>
+  <circle cx="256" cy="256" r="34" fill="#fff6dc"/>
+</svg>

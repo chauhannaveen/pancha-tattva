@@ -25,6 +25,9 @@ then open http://localhost:8123.
 | `js/shaders.js` | The GPU programs for the ten scenes |
 | `js/app.js` | Behaviour: rendering, scrolling, sound, mixer, daily practice, time of day |
 | `tools/build_single.py` | Bundles everything into one HTML file in `dist/` |
+| `manifest.webmanifest`, `sw.js` | Make the site installable on phones and usable offline |
+| `assets/` | App icon and the preview image shown when the link is shared |
+| `tools/make_images.py`, `tools/og-card.html` | Regenerate the icons and preview image |
 
 The three scripts are plain files loaded in order (content, shaders, app), not modules, so the
 site also works when opened directly from disk.
@@ -36,10 +39,20 @@ site also works when opened directly from disk.
 writes `dist/pancha-tattva.html`, a single self-contained file, plus a variant shaped for the
 claude.ai share link.
 
+## If the web address changes
+
+The preview-image tags in `index.html` (`og:url`, `og:image`, `twitter:image`) contain the full
+address `https://chauhannaveen.github.io/pancha-tattva/`. Update them if the site moves to
+another domain.
+
+After changing any file, bump `CACHE` in `sw.js` (for example to `pancha-tattva-v2`) if returning
+visitors must get the new version immediately; otherwise they get it on their second visit.
+
 ## Notes
 
 - The daily practice streak and the wisdom-card preference are stored in the visitor's browser
   only. Nothing is sent anywhere.
-- Fonts load from Google Fonts; offline, the Sanskrit text falls back to a system font.
+- Fonts load from Google Fonts and are saved for offline use after the first visit; before that,
+  the Sanskrit text falls back to a system font.
 - The scripture quotations and references in `js/content.js` have not yet been reviewed by
   someone who knows the source texts.

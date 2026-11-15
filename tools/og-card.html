@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- The link-preview image, drawn with the site's own opening scene.
+     tools/make_images.py screenshots this page at 1200 x 630 into assets/og.png. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@1,300&family=Tiro+Devanagari+Sanskrit&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1200px;height:630px;overflow:hidden;background:#000;color:#fff}
+canvas{position:absolute;inset:0;width:1200px;height:630px}
+.t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.42),transparent 68%)}
+.c{font:400 19px 'Cinzel',serif;letter-spacing:.5em;color:#d9c7ff;margin-right:-.5em}
+.d{font:400 190px/1.12 'Tiro Devanagari Sanskrit','Nirmala UI',serif;
+  background:linear-gradient(100deg,#ff5a4d,#ff9d3c,#ffe169,#6fe39a,#5fb8ff,#7d7bff,#d79bff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 40px rgba(170,120,255,.5))}
+.n{font:400 44px 'Cinzel',serif;letter-spacing:.8em;margin-right:-.8em}
+.l{font:italic 300 28px 'Cormorant Garamond',Georgia,serif;margin-top:22px;color:rgba(255,255,255,.9)}
+</style>
+</head>
+<body>
+<canvas id="gl" width="1200" height="630"></canvas>
+<div class="t">
+  <div class="c">THE FIVE ELEMENTS · AND THE TWO BEYOND</div>
+  <div class="d">पञ्च तत्त्व</div>
+  <div class="n">PANCHA TATTVA</div>
+  <div class="l">Earth, water, fire, air and ether, rendered live in your browser.</div>
+</div>
+<script src="../js/shaders.js"></script>
+<script>
+const gl=document.getElementById('gl').getContext('webgl',{alpha:false,preserveDrawingBuffer:true});
+const mk=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+  if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;};
+const p=gl.createProgram();
+gl.attachShader(p,mk(gl.VERTEX_SHADER,'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+gl.attachShader(p,mk(gl.FRAGMENT_SHADER,COMMON+TODGL+SCENES[0]+MAIN));
+gl.bindAttribLocation(p,0,'a');gl.linkProgram(p);gl.useProgram(p);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+const u=n=>gl.getUniformLocation(p,n);
+gl.uniform2f(u('uRes'),1200,630);gl.uniform1f(u('uTime'),7.3);gl.uniform2f(u('uMouse'),0,0);gl.uniform1f(u('uAlpha'),1);
+gl.uniform3f(u('uClick'),0,0,100);gl.uniform1f(u('uVel'),0);gl.uniform3f(u('uTint'),.7,.55,1);
+gl.uniform2f(u('uDrag'),0,0);gl.uniform1f(u('uForce'),0);gl.uniform1f(u('uHour'),12);
+gl.viewport(0,0,1200,630);gl.drawArrays(gl.TRIANGLES,0,3);
+</script>
+</body>
+</html>

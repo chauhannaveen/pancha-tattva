@@ -230,3 +230,6 @@ function frame(now){requestAnimationFrame(frame);
 }
 setMix();
 requestAnimationFrame(frame);
+
+/* offline support and install-to-home-screen; needs a real web address, so it is skipped for files opened from disk */
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
